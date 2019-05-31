@@ -1,0 +1,37 @@
+import pandas as pd
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
+from sklearn.externals import joblib
+import logging
+
+data=pd.read_csv('C:\\Users\\HP\\Desktop\\give me some credit\\data\\cs-training.csv')
+del data['Unnamed: 0']
+data.columns=['y','RevolvingUtilizationOfUnsecuredLines', 'age','NumberOfTime30-59DaysPastDueNotWorse', 'DebtRatio', 'MonthlyIncome','NumberOfOpenCreditLinesAndLoans', 'NumberOfTimes90DaysLate','NumberRealEstateLoansOrLines', 'NumberOfTime60-89DaysPastDueNotWorse','NumberOfDependents']
+data_x=data[['RevolvingUtilizationOfUnsecuredLines', 'age','NumberOfTime30-59DaysPastDueNotWorse', 'DebtRatio', 'MonthlyIncome','NumberOfOpenCreditLinesAndLoans', 'NumberOfTimes90DaysLate','NumberRealEstateLoansOrLines', 'NumberOfTime60-89DaysPastDueNotWorse','NumberOfDependents']]
+data_y=data['y']
+train_x, test_x, train_y, test_y = train_test_split(data_x.values, data_y.values, test_size=0.2,random_state=1234)
+d_train = xgb.DMatrix(train_x, label=train_y)
+d_valid = xgb.DMatrix(test_x, label=test_y)
+watchlist = [(d_train, 'train'), (d_valid, 'valid')]
+#参数设置
+params={
+    'eta': 0.2, # 特征权重 取值范围0~1 通常最后设置eta为0.01~0.2
+    'max_depth':3,   # 通常取值：3-10 树的深度
+    'min_child_weight':1, # 最小样本的权重，调大参数可以防止过拟合
+    'gamma':0.3,
+    'subsample':0.8, #随机取样比例
+    'colsample_bytree':0.8, #默认为1 ，取值0~1 对特征随机采集比例
+    'booster':'gbtree', #迭代树
+    'objective': 'binary:logistic', #逻辑回归，输出为概率
+    # 'nthread':12, #设置最大的进程量，若不设置则会使用全部资源
+    'scale_pos_weight': 1, #默认为0，1可以处理类别不平衡
+    'lambda':1,   #默认为1
+    'seed':1234, #随机数种子
+    'silent':1 , #0表示输出结果
+    'eval_metric': 'auc' # 检验指标
+}
+bst = xgb.train(params, d_train,1000,watchlist,early_stopping_rounds=500, verbose_eval=10)
+tree_nums=bst.best_ntree_limit
+logging.info('最优模型树的数量：%s，auc：%s' % (bst.best_ntree_limit, bst.best_score))
+bst = xgb.train(params, d_train,tree_nums,watchlist,early_stopping_rounds=500, verbose_eval=10)
+joblib.dump(bst, 'd:/xgboost.model') #保存模型
