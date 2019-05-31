@@ -1,4 +1,7 @@
-# 评分模型的开发、部署、测试、文档说明，详见[github](https://github.com/chengsong990020186/xgboost_score_model/tree/master)：https://github.com/chengsong990020186/xgboost_score_model/tree/master，如对你有学习有帮助，请支持点赞~
+# 评分模型的开发、部署、测试、文档说明全流程
+**详见[github](https://github.com/chengsong990020186/xgboost_score_model/tree/master)**
+https://github.com/chengsong990020186/xgboost_score_model/tree/master
+**如对你有学习有帮助，请支持点赞~**
 
 主要内容：
 - 1.使用xgboost训练模型，并保存。
@@ -138,11 +141,11 @@ python ./api.py
 api接口开启成功，可以开始实时调用，并保存调用日志。
 
 ##  3.api接口测试。
-### 1.postman进行测试
+### 3.1.postman进行测试
 
 ![postman进行测试](https://img-blog.csdnimg.cn/20190531165617975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzcWF6d3N4ZWRj,size_16,color_FFFFFF,t_70)
 
-### 2.使用测试脚本
+### 3.2.使用测试脚本
 运行以下代码进行测试
 ```
 import requests
@@ -254,10 +257,3 @@ score|预测分数|预测分数
 ------------------------------------------------------------------------------------------------------------------------
 
 评分模型的开发、部署、测试、文档说明就基本完成了。如有疑问可与我联系：990020186@qq.com
-
-
-
-
-
-
-
