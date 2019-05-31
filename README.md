@@ -1,4 +1,7 @@
-# 评分模型全流程开发、部署和测试，详见github：，如对你有学习有帮助，请支持点赞~
+# 评分模型开发、部署和测试全流程
+**详见[github](https://github.com/chengsong990020186/xgboost_score_model/tree/master)**
+https://github.com/chengsong990020186/xgboost_score_model/tree/master
+**如对你有学习有帮助，请支持点赞~**
 
 主要内容：
 - 1.使用xgboost训练模型，并保存。
@@ -6,7 +9,7 @@
 - 3.测试api接口。
 
 ## 1.使用xgboost训练模型，并保存。
-数据已上传至github，可以自己进行下载
+训练数据已上传至github，可以自行下载。
 ```
 import pandas as pd
 import xgboost as xgb
@@ -48,8 +51,6 @@ joblib.dump(bst, 'd:/xgboost.model') #保存模型
 ```
 
 ## 2.基于falsk框架，生成实时api接口,进行部署。
-基于falsk框架，生成实时api接口
-
 在目录建立 api.py 文件，代码如下
 ```
 # -*- coding: utf-8 -*-
@@ -132,22 +133,41 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
 ```
 
-
 在终端运行代码,进入Python文件目录，运行： 
 ```
 python ./api.py
 ```
-这是api接口开启成功，会生成接口，可以随时调用，并保存调用日志。
+api接口开启成功，可以开始实时调用，并保存调用日志。
 
 ##  3.api接口测试。
 ### 1.postman进行测试
-
-
-
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20190531165617975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzcWF6d3N4ZWRj,size_16,color_FFFFFF,t_70)
 ### 2.使用测试脚本
+运行以下代码进行测试
+```
+import requests
+import json
+data_sample='''
+{
+    "user_id": "123456789",
+    "user_data": {"DebtRatio": 0.80,
+				 "MonthlyIncome": 9120.0,
+				 "NumberOfDependents": 2.0,
+				 "NumberOfOpenCreditLinesAndLoans": 13.0,
+				 "NumberOfTime30-59DaysPastDueNotWorse": 2.0,
+				 "NumberOfTime60-89DaysPastDueNotWorse": 0.0,
+				 "NumberOfTimes90DaysLate": 0.0,
+				 "NumberRealEstateLoansOrLines": 6.0,
+				 "RevolvingUtilizationOfUnsecuredLines": 0.766,
+				 "age": 45.0}
+}
+'''
+data=json.loads(data_sample)
+url='http://127.0.0.1:8000/xgboost_score_model/v1.0'
+page=requests.post(url,json=data) 
+print(page.json())
 
 ```
 
-```
+**评分模型的开发、部署、测试就基本完成了。如有疑问可与我联系：990020186@qq.com**
 
-评分模型的开发、部署、测试就基本完成了。
