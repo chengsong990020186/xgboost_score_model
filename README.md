@@ -1,12 +1,10 @@
-# 评分模型开发、部署和测试全流程
-**详见[github](https://github.com/chengsong990020186/xgboost_score_model/tree/master)**
-https://github.com/chengsong990020186/xgboost_score_model/tree/master
-**如对你有学习有帮助，请支持点赞~**
+# 评分模型的开发、部署、测试、文档说明，详见[github](https://github.com/chengsong990020186/xgboost_score_model/tree/master)：https://github.com/chengsong990020186/xgboost_score_model/tree/master，如对你有学习有帮助，请支持点赞~
 
 主要内容：
 - 1.使用xgboost训练模型，并保存。
 - 2.基于falsk框架，生成实时api接口,进行部署。
 - 3.测试api接口。
+- 4.api文档
 
 ## 1.使用xgboost训练模型，并保存。
 训练数据已上传至github，可以自行下载。
@@ -141,7 +139,9 @@ api接口开启成功，可以开始实时调用，并保存调用日志。
 
 ##  3.api接口测试。
 ### 1.postman进行测试
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190531165617975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzcWF6d3N4ZWRj,size_16,color_FFFFFF,t_70)
+
+![postman进行测试](https://img-blog.csdnimg.cn/20190531165617975.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NzcWF6d3N4ZWRj,size_16,color_FFFFFF,t_70)
+
 ### 2.使用测试脚本
 运行以下代码进行测试
 ```
@@ -169,5 +169,95 @@ print(page.json())
 
 ```
 
-**评分模型的开发、部署、测试就基本完成了。如有疑问可与我联系：990020186@qq.com**
+## 4.api文档
+
+### xgboost评分模型调用接口
+#### 接口描述
+该接口是评分模型调用。
+
+#### 接口说明
+
+##### 1.请求URL:
+```
+测试环境：http://127.0.0.1:8000/xgboost_score_model/v1.0
+正式环境：***
+```
+##### 2.请求方式
+POST
+
+##### 3.支持格式
+JSON
+
+##### 4.请求参数说明
+
+参数名称|参数类型|描述
+--|--|--
+user_id|string|用户id
+user_data|json|用户特征数据
+
+##### 5.请求示例
+```
+{
+    "user_id": "123456789",
+    "user_data": {"DebtRatio": 0.8029821290000001,
+				 "MonthlyIncome": 9120.0,
+				 "NumberOfDependents": 2.0,
+				 "NumberOfOpenCreditLinesAndLoans": 13.0,
+				 "NumberOfTime30-59DaysPastDueNotWorse": 2.0,
+				 "NumberOfTime60-89DaysPastDueNotWorse": 0.0,
+				 "NumberOfTimes90DaysLate": 0.0,
+				 "NumberRealEstateLoansOrLines": 6.0,
+				 "RevolvingUtilizationOfUnsecuredLines": 0.76612660900000007,
+				 "age": 45.0}
+}
+```
+
+##### 6.成功返回的json对象说明
+格式 : JSON 编码 : UTF-8 返回数据示例:
+```
+{
+    "code": 1,
+    "proba": "0.397148",
+    "score": "548.644005001",
+    "user_id": "123456789"
+}
+```
+
+##### 7.失败返回时对应代码说明
+```
+{
+    "code": 101,
+    "error_msg": "输入特征错误:'aaaa'",
+    "error_type": "KeyError"
+}
+
+{
+    "ValueError": "ValueError",
+    "code": 102,
+    "error_msg": "输入值错误：invalid literal for int() with base 10: ''"
+}
+{
+    "code": 103,
+    "error_msg": "未知错误:400 Bad Request: Failed to decode JSON object: Expecting ',' delimiter: line 12 column 1 (char 227)",
+    "error_type": "Unchek_Exception"
+}
+```
+##### 8.返回字段说明
+字段名|字段名称|描述
+--|--|--
+code|状态码|1：返回成功
+user_id|用户id|用户id
+proba|预测概率|预测概率
+score|预测分数|预测分数
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+评分模型的开发、部署、测试、文档说明就基本完成了。如有疑问可与我联系：990020186@qq.com
+
+
+
+
+
+
 
